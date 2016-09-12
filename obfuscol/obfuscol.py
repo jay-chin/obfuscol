@@ -51,7 +51,7 @@ def obfs_file(infile, outfile, hostcol, csvheader=False):
     with open(infile, 'r') as csvfile, open(outfile, 'w') as resfile:
         datareader = csv.reader(csvfile, delimiter=',')
         if csvheader: # Don't obfuscate first header row
-            resfile.write(datareader.next())
+            resfile.write(','.join(datareader.next()) + '\n')
         for row in datareader:
             hostname = row[hostcol]
             try: # Get obfuscated hostname from mapping cache
@@ -77,7 +77,7 @@ def restore_file(obfsfile, outfile, mappingfile, hostcol, csvheader=False):
     with open(obfsfile, 'r') as infile, open(outfile, 'w') as resfile:
         datareader = csv.reader(infile, delimiter=',')
         if csvheader: # Leave header line as is 
-            resfile.write(datareader.next())
+            resfile.write(','.join(datareader.next()) + '\n')
         for row in datareader:
             obfsname = row[hostcol]
             try: # Get obfuscated hostname from mapping cache
@@ -124,8 +124,7 @@ def main():
         with open(args.map_file, 'w') as mapfile:
             print "Generating map file to : %s" % args.map_file
             json.dump(host_mapping, mapfile)
-    
-    if args.restore:
+    elif args.restore:
         print "Restoring %s from mapfile %s" % (args.outfile, args.map_file)
         restore_file(args.infile, args.outfile, args.map_file, 
                     args.host_col - 1, csvheader=args.csv_header)
