@@ -5,7 +5,6 @@ import json
 import argparse
 import sys
 
-# https://github.com/pereorga/csvshuf/blob/master/setup.py
 rot13 = lambda x: x.encode('rot_13')  # Hail Caeser !
 
 def randomize_chars(word):
